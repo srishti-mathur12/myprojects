@@ -11,19 +11,8 @@ public class Employee {
 	private float age;
 	private String contactNumber;
 	private String Address;
-//	private Department department;
+	private String department;
 	private double salary;
-
-//	public Employee(String name, float age, String contactNumber, String address, Department department,
-//			double salary) {
-//		super();
-//		this.name = name;
-//		this.age = age;
-//		this.contactNumber = contactNumber;
-//		Address = address;
-//		this.department = department;
-//		this.salary = salary;
-//	}
 
 	public long getId() {
 		return id;
@@ -65,13 +54,13 @@ public class Employee {
 		Address = address;
 	}
 
-//	public Department getDepartment() {
-//		return department;
-//	}
-//
-//	public void setDepartment(Department department) {
-//		this.department = department;
-//	}
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 
 	public double getSalary() {
 		return salary;
