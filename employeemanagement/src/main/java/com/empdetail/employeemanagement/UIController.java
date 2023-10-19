@@ -22,7 +22,6 @@ public class UIController {
 
     @GetMapping("/page/{pageno}")
     public String findPaginated(@PathVariable int pageno, Model m) {
-
         Page<Employee> emplist = employeeService.getEMpByPaginate(pageno, 10);
         m.addAttribute("employee", emplist);
         m.addAttribute("currentPage", pageno);
