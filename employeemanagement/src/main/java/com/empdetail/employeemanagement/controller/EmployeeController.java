@@ -62,7 +62,7 @@ public class EmployeeController {
     }
 
     /* Delete employee */
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteEMp(@PathVariable Long id, HttpSession session) {
         employeeService.deleteEmployee(id);
         session.setAttribute("msg", "Emp Data Delete Sucessfully..");
