@@ -58,7 +58,7 @@ public class EmployeeController {
     public String updateEmp(@ModelAttribute Employee e, HttpSession session) {
         employeeService.addNewEmployee(e);
         session.setAttribute("msg", "Emp Data Update Sucessfully..");
-        return "redirect:/";
+        return "redirect:/home/";
     }
 
     /* Delete employee */
@@ -66,7 +66,7 @@ public class EmployeeController {
     public String deleteEMp(@PathVariable Long id, HttpSession session) {
         employeeService.deleteEmployee(id);
         session.setAttribute("msg", "Emp Data Delete Sucessfully..");
-        return "redirect:/";
+        return "redirect:/home/";
     }
 
     @GetMapping("/employee")
