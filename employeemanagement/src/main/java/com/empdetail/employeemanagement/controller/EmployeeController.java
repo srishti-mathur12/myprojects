@@ -2,60 +2,100 @@ package com.empdetail.employeemanagement.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 import com.empdetail.employeemanagement.model.Employee;
 import com.empdetail.employeemanagement.service.EmployeeService;
 
-@RestController
+@Controller
 @RequestMapping("/home")
 public class EmployeeController {
-	
-	@Autowired
-	EmployeeService employeeService;
-	
-	@GetMapping("/employee")
-	public ResponseEntity<List<Employee>> getAllEmployee(){
-		return ResponseEntity.ok(employeeService.findAllEmployees());
-	}
-	
-//	@GetMapping("/department")
-//	public ResponseEntity <List<Employee>> getByEmployeeDepartment(Employee employee){
-//		return ResponseEntity.ok(employeeService.findEmployeesByDepartment());
-//	}
-	
-	@GetMapping("/id-employee")
-	public ResponseEntity<Employee> getEmployeeById(Long id){
-		return ResponseEntity.ok(employeeService.findEmployeeById(id));
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> getAllEmployee(@PathVariable Long id,@RequestBody Employee employee){
-		employeeService.deleteEmployee(employee);
-		return ResponseEntity.ok(true);
-	}
-	
-	@PostMapping("/")
-	public ResponseEntity<Boolean> addEmployee(@RequestBody Employee employee){
-		employeeService.addNewEmployee(employee);
-		return ResponseEntity.ok(true);
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Boolean> upadateEmployee(@PathVariable Long id,@RequestBody Employee employee){
-		employeeService.updateSpecificEmployee(employee);
-		return ResponseEntity.ok(true);
-	}
-	
+
+    @Autowired
+    EmployeeService employeeService;
+
+    @GetMapping("/")
+    public String home(Model m) {
+        return findPaginated(0, m);
+    }
+
+    @GetMapping("/page/{pageno}")
+    public String findPaginated(@PathVariable int pageno, Model m) {
+
+        Page<Employee> emplist = employeeService.getEMpByPaginate(pageno, 10);
+        m.addAttribute("employee", emplist);
+        m.addAttribute("currentPage", pageno);
+        m.addAttribute("totalPages", emplist.getTotalPages());
+        m.addAttribute("totalItem", emplist.getTotalElements());
+        return "index";
+    }
+
+    @GetMapping("/addemp")
+    public String addEmpForm() {
+        return "add_emp";
+    }
+
+    @PostMapping("/register")
+    public String empRegister(@ModelAttribute Employee e, HttpSession session) {
+        employeeService.addNewEmployee(e);
+        session.setAttribute("msg", "Emplyoee Added Sucessfully..");
+        return "redirect:/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, Model m) {
+        Employee e = employeeService.findEmployeeById(id);
+        m.addAttribute("employee", e);
+        return "edit";
+    }
+
+    @PostMapping("/update")
+    public String updateEmp(@ModelAttribute Employee e, HttpSession session) {
+        employeeService.addNewEmployee(e);
+        session.setAttribute("msg", "Emp Data Update Sucessfully..");
+        return "redirect:/";
+    }
+
+    /* Delete employee */
+    @DeleteMapping("/delete/{id}")
+    public String deleteEMp(@PathVariable Long id, HttpSession session) {
+        employeeService.deleteEmployee(id);
+        session.setAttribute("msg", "Emp Data Delete Sucessfully..");
+        return "redirect:/";
+    }
+
+    @GetMapping("/employee")
+    public ResponseEntity<List<Employee>> getAllEmployee() {
+        return ResponseEntity.ok(employeeService.findAllEmployees());
+    }
+
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.findEmployeeById(id));
+    }
+
+    @DeleteMapping("/employee/{id}")
+    public ResponseEntity<Boolean> getAllEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/employee")
+    public ResponseEntity<Boolean> addEmployee(@RequestBody Employee employee) {
+        employeeService.addNewEmployee(employee);
+        return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/employee")
+    public ResponseEntity<Boolean> updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+        employeeService.updateSpecificEmployee(id, employee);
+        return ResponseEntity.ok(true);
+    }
 
 
 }
