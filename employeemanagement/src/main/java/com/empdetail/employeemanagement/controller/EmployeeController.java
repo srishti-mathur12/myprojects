@@ -37,14 +37,14 @@ public class EmployeeController {
 
     @GetMapping("/addemp")
     public String addEmpForm() {
-        return "add_emp";
+        return "add-emp";
     }
 
     @PostMapping("/register")
     public String empRegister(@ModelAttribute Employee e, HttpSession session) {
         employeeService.addNewEmployee(e);
         session.setAttribute("msg", "Emplyoee Added Sucessfully..");
-        return "redirect:/";
+        return "redirect:/home/";
     }
 
     @GetMapping("/edit/{id}")
