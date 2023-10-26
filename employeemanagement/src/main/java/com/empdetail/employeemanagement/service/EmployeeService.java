@@ -47,5 +47,10 @@ public class EmployeeService {
         return employeeRepository.save(emp);
     }
 
+	public List<Employee> findEmployeeByName(String name) {
+		List<Employee> employees = employeeRepository.findByName(name);
+		return employees;
+	}
+
 
 }
