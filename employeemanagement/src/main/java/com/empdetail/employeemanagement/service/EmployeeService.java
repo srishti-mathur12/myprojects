@@ -20,7 +20,7 @@ public class EmployeeService {
         return (employeeRepository.findAll());
     }
 
-    public Page<Employee> getEMpByPaginate(int currentPage, int size) {
+    public Page<Employee> getEmployeeByPaginate(int currentPage, int size) {
         PageRequest p = PageRequest.of(currentPage, size);
         return employeeRepository.findAll(p);
     }
@@ -47,8 +47,9 @@ public class EmployeeService {
         return employeeRepository.save(emp);
     }
 
-	public List<Employee> findEmployeeByName(String name) {
-		List<Employee> employees = employeeRepository.findByName(name);
+	public Page<Employee> findEmployeeByName(String name, int currentPage, int size) {
+		PageRequest p = PageRequest.of(currentPage, size);
+		Page<Employee> employees = employeeRepository.findByName(name, p);
 		return employees;
 	}
 
